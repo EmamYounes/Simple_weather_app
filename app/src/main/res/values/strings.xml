@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Simple weather app</string>
+    <string name="please_enter_city_name">Please enter city name</string>
+    <string name="add_new_city">add new city</string>
+</resources>
