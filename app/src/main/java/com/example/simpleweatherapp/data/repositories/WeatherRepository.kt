@@ -32,6 +32,10 @@ class WeatherRepository(
         selectedItem.postValue(item)
     }
 
+    fun getWeatherListData(): List<CityWeatherItem>? {
+        return weatherList.value
+    }
+
     fun getSelectedItemData(): CityWeatherItem? {
         return cityWeatherItem.value
     }

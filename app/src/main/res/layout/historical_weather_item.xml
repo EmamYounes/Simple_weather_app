@@ -19,31 +19,45 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:onClick="@{(v) ->handler.onItemClick(weatherItem)}"
+            android:layout_height="wrap_content"
             android:padding="12dp">
 
-            <TextView
-                android:id="@+id/name"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{weatherItem.cityName}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                tools:text="London" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{weatherItem.date}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    tools:text="04 09 2020 - 10.00" />
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{weatherItem.description+','+' '+weatherItem.temp+`C`}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    tools:text="Cloudy,15c" />
+
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/name"
                 android:gravity="end">
 
                 <ImageView
-                    android:id="@+id/info_icon"
+                    android:id="@+id/arr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:onClick="@{(v) ->handler.onIconClick(weatherItem)}"
-                    android:src="@drawable/ic_info_icon_svgrepo_com">
+                    android:layout_marginEnd="10dp"
+                    android:onClick="@{(v) ->handler.onItemClick(weatherItem)}"
+                    android:src="@drawable/ic_right_24">
 
                 </ImageView>
             </LinearLayout>

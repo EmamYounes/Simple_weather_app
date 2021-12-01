@@ -39,6 +39,9 @@ class WeatherViewModel(
     fun getSelectedItemData() : CityWeatherItem? {
         return repository.getSelectedItemData()
     }
+    fun getWeatherListData() : List<CityWeatherItem>? {
+        return repository.getWeatherListData()
+    }
 
     fun setSelectedItemData(item: CityWeatherItem) {
         repository.setSelectedItemData(item)

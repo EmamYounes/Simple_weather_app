@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
@@ -22,7 +20,7 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 
-class HomeFragment : Fragment(), KodeinAware, OnClick {
+class HistoricalFragment : Fragment(), KodeinAware, OnClick {
 
     override val kodein by kodein()
 
@@ -30,66 +28,36 @@ class HomeFragment : Fragment(), KodeinAware, OnClick {
 
     private lateinit var viewModel: WeatherViewModel
     private var recyclerview: RecyclerView? = null
-    private var addViewLayout: LinearLayout? = null
-    private var addIcon: ImageView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.home_fragment, container, false)
+        return inflater.inflate(R.layout.historical_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, factory).get(WeatherViewModel::class.java)
         recyclerview = view?.findViewById(R.id.recyclerview)
-        addViewLayout = view?.findViewById(R.id.add_view)
-        addIcon = view?.findViewById(R.id.add_icon)
         bindUI()
     }
 
 
     private fun bindUI() = Coroutines.main {
         manageWeatherList()
-        handleAddIconInCaseEmptyList()
-        handleMainAddIcon()
+
     }
 
-    private fun handleMainAddIcon() {
-        (activity as HomeActivity).getAddIconToolbar()?.setOnClickListener {
-            navToAddNewCityFragment()
+    private fun manageWeatherList() {
+
+        val list = viewModel.getWeatherListData()?.filter {
+            it.cityName == viewModel.getSelectedItemData()?.cityName
         }
+        list?.toWeatherViewItem()?.let { initRecyclerView(it) }
     }
 
-    private fun handleAddIconInCaseEmptyList() {
-        addIcon?.setOnClickListener {
-            navToAddNewCityFragment()
-        }
-    }
-
-    private fun navToAddNewCityFragment() {
-        val navController =
-            activity?.findNavController(R.id.nav_host_fragment)
-        navController?.navigate(R.id.addNewCityFragment)
-    }
-
-    private suspend fun manageWeatherList() {
-        viewModel.weatherList.await().observe(this, {
-            if (it.isEmpty()) {
-                recyclerview?.visibility = View.GONE
-                addViewLayout?.visibility = View.VISIBLE
-                (activity as HomeActivity).hideAddIconToolbar()
-            } else {
-                recyclerview?.visibility = View.VISIBLE
-                (activity as HomeActivity).showAddIconToolbar()
-                addViewLayout?.visibility = View.GONE
-                initRecyclerView(it.toWeatherViewItem())
-            }
-        })
-    }
-
-    private fun initRecyclerView(weatherList: List<WeatherViewItem>) {
+    private fun initRecyclerView(weatherList: List<HistoricalWeatherViewItem>) {
 
         val mAdapter = GroupAdapter<ViewHolder>().apply {
             addAll(weatherList)
@@ -103,9 +71,9 @@ class HomeFragment : Fragment(), KodeinAware, OnClick {
     }
 
 
-    private fun List<CityWeatherItem>.toWeatherViewItem(): List<WeatherViewItem> {
+    private fun List<CityWeatherItem>.toWeatherViewItem(): List<HistoricalWeatherViewItem> {
         return this.map {
-            WeatherViewItem(it, this@HomeFragment)
+            HistoricalWeatherViewItem(it, this@HistoricalFragment)
         }
     }
 
@@ -114,27 +82,10 @@ class HomeFragment : Fragment(), KodeinAware, OnClick {
         navToWeatherInfoFragment()
     }
 
-    override fun onIconClick(item: CityWeatherItem) {
-        viewModel.setSelectedItemData(item)
-        navToHistoricalFragment()
-    }
-
     private fun navToWeatherInfoFragment() {
         val navController =
             activity?.findNavController(R.id.nav_host_fragment)
         navController?.navigate(R.id.weatherInfoFragment)
     }
-
-    private fun navToHistoricalFragment() {
-        val navController =
-            activity?.findNavController(R.id.nav_host_fragment)
-        navController?.navigate(R.id.historicalFragment)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        (activity as HomeActivity).hideAddIconToolbar()
-    }
-
 
 }
