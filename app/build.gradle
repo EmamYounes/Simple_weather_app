@@ -74,6 +74,9 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:2.4.0-beta02"
     implementation "androidx.navigation:navigation-ui-ktx:2.4.0-beta02"
 
+    //Picasso for load image url
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
     //Android RX
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation 'com.jakewharton.rxbinding:rxbinding:0.4.0'

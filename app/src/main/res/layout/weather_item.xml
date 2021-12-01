@@ -7,6 +7,10 @@
         <variable
             name="weatherItem"
             type="com.example.simpleweatherapp.data.db.entities.CityWeatherItem" />
+
+        <variable
+            name="handler"
+            type="com.example.simpleweatherapp.ui.OnClick" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -16,6 +20,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:onClick="@{(v) ->handler.onItemClick(weatherItem)}"
             android:padding="12dp">
 
             <TextView

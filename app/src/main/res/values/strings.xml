@@ -7,4 +7,9 @@
     <string name="success">Success</string>
     <string name="city_added_successfully">City added successfully</string>
     <string name="cancel">Cancel</string>
+    <string name="weather_information_for">weather information for london received on 01-08-2020</string>
+    <string name="description">Description : </string>
+    <string name="temp">Temp : </string>
+    <string name="humidity">humidity : </string>
+    <string name="windspeed">Windspeed :</string>
 </resources>

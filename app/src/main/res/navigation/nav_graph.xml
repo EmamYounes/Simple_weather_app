@@ -12,4 +12,9 @@
         android:id="@+id/homeFragment"
         android:name="com.example.simpleweatherapp.ui.HomeFragment"
         android:label="HomeFragment" />
+
+    <fragment
+        android:id="@+id/weatherInfoFragment"
+        android:name="com.example.simpleweatherapp.ui.WeatherInfoFragment"
+        android:label="WeatherInfoFragment" />
 </navigation>

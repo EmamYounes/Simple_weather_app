@@ -22,7 +22,7 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 
-class HomeFragment : Fragment(), KodeinAware {
+class HomeFragment : Fragment(), KodeinAware, OnClick {
 
     override val kodein by kodein()
 
@@ -105,8 +105,19 @@ class HomeFragment : Fragment(), KodeinAware {
 
     private fun List<CityWeatherItem>.toWeatherViewItem(): List<WeatherViewItem> {
         return this.map {
-            WeatherViewItem(it)
+            WeatherViewItem(it, this@HomeFragment)
         }
+    }
+
+    override fun onItemClick(item: CityWeatherItem) {
+        viewModel.setSelectedItemData(item)
+        navToWeatherInfoFragment()
+    }
+
+    private fun navToWeatherInfoFragment() {
+        val navController =
+            activity?.findNavController(R.id.nav_host_fragment)
+        navController?.navigate(R.id.weatherInfoFragment)
     }
 
 }

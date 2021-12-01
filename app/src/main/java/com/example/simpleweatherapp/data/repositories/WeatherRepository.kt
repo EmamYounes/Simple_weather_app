@@ -9,6 +9,7 @@ import com.example.simpleweatherapp.data.network.SafeApiRequest
 import com.example.simpleweatherapp.data.network.responses.CityWeatherResponse
 import com.example.simpleweatherapp.data.preferences.PreferenceProvider
 import com.example.simpleweatherapp.util.ApiConstant
+import com.example.simpleweatherapp.util.TimeFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -21,9 +22,22 @@ class WeatherRepository(
     private val weatherList = MutableLiveData<List<CityWeatherItem>>()
     private var cityWeatherItem = MutableLiveData<CityWeatherItem>()
     private val errorException = MutableLiveData<String>()
+    private var selectedItem = MutableLiveData<CityWeatherItem>()
 
     init {
         weatherList.postValue(mutableListOf())
+    }
+
+    fun setSelectedItemData(item: CityWeatherItem) {
+        selectedItem.postValue(item)
+    }
+
+    fun getSelectedItemData(): CityWeatherItem? {
+        return cityWeatherItem.value
+    }
+
+    fun initSelectedItem() {
+        selectedItem = MutableLiveData<CityWeatherItem>()
     }
 
     fun initCityWeatherItem() {
@@ -71,11 +85,13 @@ class WeatherRepository(
         cityWeatherItem.temp = response.main?.temp.toString()
         cityWeatherItem.humidity = response.main?.humidity.toString()
         cityWeatherItem.windSpeed = response.wind?.speed.toString()
+        cityWeatherItem.date = TimeFormat.getCurrentDate()
         cityWeatherItem.weatherImage =
             ApiConstant.BASE_URL + "img/w/" + response.weather?.get(0)?.icon +
                     ".png?appid=" + ApiConstant.APP_ID
         response.wind?.speed.toString()
         return cityWeatherItem
     }
+
 
 }
