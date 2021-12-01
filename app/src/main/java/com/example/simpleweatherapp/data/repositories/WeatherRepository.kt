@@ -9,6 +9,7 @@ import com.example.simpleweatherapp.data.network.SafeApiRequest
 import com.example.simpleweatherapp.data.network.responses.CityWeatherResponse
 import com.example.simpleweatherapp.data.preferences.PreferenceProvider
 import com.example.simpleweatherapp.util.ApiConstant
+import com.example.simpleweatherapp.util.Coroutines
 import com.example.simpleweatherapp.util.TimeFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -25,7 +26,11 @@ class WeatherRepository(
     private var selectedItem = MutableLiveData<CityWeatherItem>()
 
     init {
-        weatherList.postValue(db.getWeatherDao().getWeatherList().value)
+        weatherList.observeForever {
+            Coroutines.io {
+                db.getWeatherDao().saveAllWeather(it)
+            }
+        }
     }
 
     fun setSelectedItemData(item: CityWeatherItem) {
@@ -74,7 +79,6 @@ class WeatherRepository(
                 list.add(item)
                 weatherList.postValue(list)
                 cityWeatherItem.postValue(item)
-                db.getWeatherDao().saveAllWeather(list)
             } catch (e: Exception) {
                 errorException.postValue(e.toString())
                 e.printStackTrace()

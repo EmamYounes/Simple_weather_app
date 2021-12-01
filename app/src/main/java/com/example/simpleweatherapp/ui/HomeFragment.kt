@@ -131,8 +131,8 @@ class HomeFragment : Fragment(), KodeinAware, OnClick {
         navController?.navigate(R.id.historicalFragment)
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onDestroy() {
+        super.onDestroy()
         (activity as HomeActivity).hideAddIconToolbar()
     }
 
