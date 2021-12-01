@@ -22,6 +22,10 @@ class WeatherRepository(
     private val cityWeatherItem = MutableLiveData<CityWeatherItem>()
     private val errorException = MutableLiveData<String>()
 
+    init {
+        weatherList.postValue(mutableListOf())
+    }
+
     fun getWeatherList(): LiveData<List<CityWeatherItem>> {
         return weatherList
     }
@@ -43,9 +47,10 @@ class WeatherRepository(
                 if (weatherList.value?.isNotEmpty() == true) {
                     list.addAll(weatherList.value!!.toMutableList())
                 }
-                val cityWeatherItem = mapResponse(response)
-                list.add(cityWeatherItem)
+                val item = mapResponse(response)
+                list.add(item)
                 weatherList.postValue(list)
+                cityWeatherItem.postValue(item)
             } catch (e: Exception) {
                 errorException.postValue(e.toString())
                 e.printStackTrace()
@@ -63,7 +68,7 @@ class WeatherRepository(
         cityWeatherItem.humidity = response.main?.humidity.toString()
         cityWeatherItem.windSpeed = response.wind?.speed.toString()
         cityWeatherItem.weatherImage =
-            ApiConstant.BASE_URL + "img/w/" + response.weather?.get(0)?.id +
+            ApiConstant.BASE_URL + "img/w/" + response.weather?.get(0)?.icon +
                     ".png?appid=" + ApiConstant.APP_ID
         response.wind?.speed.toString()
         return cityWeatherItem

@@ -4,17 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
+import android.widget.ImageView
+import android.widget.LinearLayout
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.simpleweatherapp.R
 import com.example.simpleweatherapp.data.db.entities.CityWeatherItem
 import com.example.simpleweatherapp.util.Coroutines
-import com.example.simpleweatherapp.util.hide
-import com.example.simpleweatherapp.util.show
 import com.example.simpleweatherapp.viewmodel.WeatherViewModel
 import com.example.simpleweatherapp.viewmodel.WeatherViewModelFactory
 import com.xwray.groupie.GroupAdapter
@@ -30,8 +30,10 @@ class HomeFragment : Fragment(), KodeinAware {
     private val factory: WeatherViewModelFactory by instance()
 
     private lateinit var viewModel: WeatherViewModel
-    private var progressBar: ProgressBar? = null
     private var recyclerview: RecyclerView? = null
+    private var addViewLayout: LinearLayout? = null
+    private var addIcon: ImageView? = null
+    private var addIconToolbar: AppCompatImageView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,17 +45,43 @@ class HomeFragment : Fragment(), KodeinAware {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, factory).get(WeatherViewModel::class.java)
-        progressBar = view?.findViewById(R.id.progress_bar)
         recyclerview = view?.findViewById(R.id.recyclerview)
+        addViewLayout = view?.findViewById(R.id.add_view)
+        addIcon = view?.findViewById(R.id.add_icon)
+        addIconToolbar = view?.findViewById(R.id.add_icon_toolbar)
         bindUI()
     }
 
 
     private fun bindUI() = Coroutines.main {
-        progressBar?.show()
-        viewModel.weatherList.await().observe(this, Observer {
-            progressBar?.hide()
-            initRecyclerView(it.toQuoteItem())
+        manageWeatherList()
+        handleAddIconInCaseEmptyList()
+    }
+
+    private fun handleAddIconInCaseEmptyList() {
+        addIcon?.setOnClickListener {
+            navToAddNewCityFragment()
+        }
+    }
+
+    private fun navToAddNewCityFragment() {
+        val navController =
+            activity?.findNavController(R.id.nav_host_fragment)
+        navController?.navigate(R.id.addNewCityFragment)
+    }
+
+    private suspend fun manageWeatherList() {
+        viewModel.weatherList.await().observe(this, {
+            if (it.isEmpty()) {
+                recyclerview?.visibility = View.GONE
+                addViewLayout?.visibility = View.VISIBLE
+                addIconToolbar?.visibility = View.GONE
+            } else {
+                recyclerview?.visibility = View.VISIBLE
+                addIconToolbar?.visibility = View.VISIBLE
+                addViewLayout?.visibility = View.GONE
+                initRecyclerView(it.toWeatherViewItem())
+            }
         })
     }
 
@@ -71,7 +99,7 @@ class HomeFragment : Fragment(), KodeinAware {
     }
 
 
-    private fun List<CityWeatherItem>.toQuoteItem(): List<WeatherViewItem> {
+    private fun List<CityWeatherItem>.toWeatherViewItem(): List<WeatherViewItem> {
         return this.map {
             WeatherViewItem(it)
         }

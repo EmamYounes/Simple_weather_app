@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class CityWeatherItem(
     @PrimaryKey(autoGenerate = true)
+    val id: Long? = null,
     var cityName: String? = "",
     var weatherInfo: String? = "",
     var weatherImage: String? = "",
