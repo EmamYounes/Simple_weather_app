@@ -9,6 +9,7 @@ import com.example.simpleweatherapp.data.network.SafeApiRequest
 import com.example.simpleweatherapp.data.network.responses.CityWeatherResponse
 import com.example.simpleweatherapp.data.preferences.PreferenceProvider
 import com.example.simpleweatherapp.util.ApiConstant
+import com.example.simpleweatherapp.util.ConvertUtil
 import com.example.simpleweatherapp.util.Coroutines
 import com.example.simpleweatherapp.util.TimeFormat
 import kotlinx.coroutines.Dispatchers
@@ -92,7 +93,8 @@ class WeatherRepository(
         cityWeatherItem.cityName = response.name
         cityWeatherItem.weatherInfo = response.name
         cityWeatherItem.description = response.weather?.get(0)?.description
-        cityWeatherItem.temp = response.main?.temp.toString()
+        cityWeatherItem.temp =
+            response.main?.temp?.let { ConvertUtil.convertFromKelvinToCelsius(it).toString() }
         cityWeatherItem.humidity = response.main?.humidity.toString()
         cityWeatherItem.windSpeed = response.wind?.speed.toString()
         cityWeatherItem.date = TimeFormat.getCurrentDate()

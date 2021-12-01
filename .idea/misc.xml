@@ -3,13 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/emamyounes/AndroidStudioProjects/Simpleweatherapp/app/src/main/res/drawable/border_black_button.xml" value="0.23055555555555557" />
         <entry key="..\:/Users/emamyounes/AndroidStudioProjects/Simpleweatherapp/app/src/main/res/drawable/ic_add.xml" value="0.23425925925925925" />
         <entry key="..\:/Users/emamyounes/AndroidStudioProjects/Simpleweatherapp/app/src/main/res/drawable/ic_icons_add_green.xml" value="0.23425925925925925" />
         <entry key="..\:/Users/emamyounes/AndroidStudioProjects/Simpleweatherapp/app/src/main/res/drawable/ic_info_icon_svgrepo_com.xml" value="0.1" />
+        <entry key="..\:/Users/emamyounes/AndroidStudioProjects/Simpleweatherapp/app/src/main/res/drawable/ic_left.xml" value="0.23055555555555557" />
         <entry key="..\:/Users/emamyounes/AndroidStudioProjects/Simpleweatherapp/app/src/main/res/drawable/ic_plus_20.xml" value="0.23425925925925925" />
         <entry key="..\:/Users/emamyounes/AndroidStudioProjects/Simpleweatherapp/app/src/main/res/drawable/ic_right_24.xml" value="0.23425925925925925" />
         <entry key="..\:/Users/emamyounes/AndroidStudioProjects/Simpleweatherapp/app/src/main/res/drawable/ic_support.xml" value="0.23425925925925925" />
-        <entry key="..\:/Users/emamyounes/AndroidStudioProjects/Simpleweatherapp/app/src/main/res/layout/activity_main.xml" value="0.18" />
+        <entry key="..\:/Users/emamyounes/AndroidStudioProjects/Simpleweatherapp/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/emamyounes/AndroidStudioProjects/Simpleweatherapp/app/src/main/res/layout/add_new_city_fragment.xml" value="0.22" />
         <entry key="..\:/Users/emamyounes/AndroidStudioProjects/Simpleweatherapp/app/src/main/res/layout/historical_fragment.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/emamyounes/AndroidStudioProjects/Simpleweatherapp/app/src/main/res/layout/historical_weather_item.xml" value="0.2" />

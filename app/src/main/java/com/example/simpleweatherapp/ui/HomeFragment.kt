@@ -42,18 +42,27 @@ class HomeFragment : Fragment(), KodeinAware, OnClick {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        init()
+        bindUI()
+    }
+
+    private fun init() {
         viewModel = ViewModelProviders.of(this, factory).get(WeatherViewModel::class.java)
         recyclerview = view?.findViewById(R.id.recyclerview)
         addViewLayout = view?.findViewById(R.id.add_view)
         addIcon = view?.findViewById(R.id.add_icon)
-        bindUI()
     }
 
 
     private fun bindUI() = Coroutines.main {
+        setTitle()
         manageWeatherList()
         handleAddIconInCaseEmptyList()
         handleMainAddIcon()
+    }
+
+    private fun setTitle() {
+        (activity as HomeActivity).setTitle(getString(R.string.cities))
     }
 
     private fun handleMainAddIcon() {
@@ -131,8 +140,8 @@ class HomeFragment : Fragment(), KodeinAware, OnClick {
         navController?.navigate(R.id.historicalFragment)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onPause() {
+        super.onPause()
         (activity as HomeActivity).hideAddIconToolbar()
     }
 

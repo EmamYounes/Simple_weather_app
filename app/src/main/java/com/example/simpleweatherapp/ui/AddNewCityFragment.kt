@@ -66,11 +66,16 @@ class AddNewCityFragment : Fragment(), KodeinAware {
 
 
     private fun bindUI() = Coroutines.main {
+        setTitle()
         init()
         manageEditText()
         manageSuccessResponse()
         manageErrorResponse()
         handleAddBtn()
+    }
+
+    private fun setTitle() {
+        (activity as HomeActivity).setTitle(getString(R.string.add_new_city))
     }
 
     private fun handleAddBtn() {

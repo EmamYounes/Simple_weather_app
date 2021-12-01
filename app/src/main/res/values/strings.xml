@@ -12,4 +12,7 @@
     <string name="temp">Temp : </string>
     <string name="humidity">humidity : </string>
     <string name="windspeed">Windspeed :</string>
+    <string name="cities">Cities</string>
+    <string name="historical">Historical</string>
+    <string name="done">Done</string>
 </resources>

@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.simpleweatherapp.R
+import com.example.simpleweatherapp.data.db.entities.CityWeatherItem
 import com.example.simpleweatherapp.viewmodel.WeatherViewModel
 import com.example.simpleweatherapp.viewmodel.WeatherViewModelFactory
 import com.squareup.picasso.Picasso
@@ -39,6 +40,11 @@ class WeatherInfoFragment : Fragment(), KodeinAware {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        init()
+        bindUI()
+    }
+
+    private fun init() {
         viewModel = ViewModelProviders.of(this, factory).get(WeatherViewModel::class.java)
         info = view?.findViewById(R.id.info)
         weatherIcon = view?.findViewById(R.id.weather_icon)
@@ -46,17 +52,38 @@ class WeatherInfoFragment : Fragment(), KodeinAware {
         temp = view?.findViewById(R.id.temp)
         humidity = view?.findViewById(R.id.humidity)
         windspeed = view?.findViewById(R.id.windspeed)
-        bindUI()
     }
 
 
     private fun bindUI() {
+        setData()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setTitle()
+        showBackBtn()
+    }
+
+    private fun showBackBtn() {
+        (activity as HomeActivity).showBackBtn()
+    }
+
+    private fun setTitle() {
+        (activity as HomeActivity).setTitle(viewModel.getSelectedItemData()?.cityName)
+    }
+
+    private fun setData() {
         val item = viewModel.getSelectedItemData()
         info?.text = "Weather information for " + item?.cityName + " received on " + item?.date
         description?.text = item?.description
         temp?.text = item?.temp + "C"
         humidity?.text = item?.humidity + "%"
         windspeed?.text = item?.windSpeed + "kmh"
+        setIcon(item)
+    }
+
+    private fun setIcon(item: CityWeatherItem?) {
         Picasso.get()
             .load(item?.weatherImage).resize(
                 200, 200
@@ -65,5 +92,13 @@ class WeatherInfoFragment : Fragment(), KodeinAware {
             .into(weatherIcon)
     }
 
+    override fun onPause() {
+        super.onPause()
+        hideBackBtn()
+    }
+
+    private fun hideBackBtn() {
+        (activity as HomeActivity).hideBackBtn()
+    }
 
 }

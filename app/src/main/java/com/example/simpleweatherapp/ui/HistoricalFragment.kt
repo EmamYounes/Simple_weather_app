@@ -38,15 +38,35 @@ class HistoricalFragment : Fragment(), KodeinAware, OnClick {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        init()
+        bindUI()
+    }
+
+    private fun init() {
         viewModel = ViewModelProviders.of(this, factory).get(WeatherViewModel::class.java)
         recyclerview = view?.findViewById(R.id.recyclerview)
-        bindUI()
     }
 
 
     private fun bindUI() = Coroutines.main {
         manageWeatherList()
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setTitle()
+        showDoneBtn()
+    }
+
+    private fun showDoneBtn() {
+        (activity as HomeActivity).showDoneBtn()
+    }
+
+    private fun setTitle() {
+        (activity as HomeActivity).setTitle(
+            viewModel.getSelectedItemData()?.cityName + " "getString(R.string.historical)
+        )
     }
 
     private fun manageWeatherList() {
@@ -88,4 +108,12 @@ class HistoricalFragment : Fragment(), KodeinAware, OnClick {
         navController?.navigate(R.id.weatherInfoFragment)
     }
 
+    override fun onPause() {
+        super.onPause()
+        hideDoneBtn()
+    }
+
+    private fun hideDoneBtn() {
+        (activity as HomeActivity).hideDoneBtn()
+    }
 }
