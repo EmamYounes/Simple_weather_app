@@ -61,16 +61,14 @@ class AddNewCityFragment : Fragment(), KodeinAware {
 
 
     private fun bindUI() = Coroutines.main {
-        progressBar?.show()
         manageEditText()
-        progressBar?.show()
         viewModel.cityWeatherItem.await().observe(this, Observer {
             progressBar?.hide()
             it.name?.let { it1 -> requireContext().toast(it1) }
         })
         addBtn?.setOnClickListener {
+            progressBar?.show()
             GlobalScope.launch {
-                progressBar?.show()
                 viewModel.addNewCity("london")
             }
         }

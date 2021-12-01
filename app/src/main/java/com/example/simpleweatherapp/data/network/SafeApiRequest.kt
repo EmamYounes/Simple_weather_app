@@ -1,5 +1,6 @@
 package com.example.simpleweatherapp.data.network
 
+import android.util.Log
 import com.example.simpleweatherapp.util.ApiException
 import org.json.JSONException
 import org.json.JSONObject
@@ -22,6 +23,7 @@ abstract class SafeApiRequest {
                 message.append("\n")
             }
             message.append("Error Code: ${response.code()}")
+            Log.d("errorBody", message.toString())
             throw ApiException(message.toString())
         }
     }
