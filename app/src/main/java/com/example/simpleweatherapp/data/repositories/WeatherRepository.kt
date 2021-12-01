@@ -21,11 +21,11 @@ class WeatherRepository(
 
     private val weatherList = MutableLiveData<List<CityWeatherItem>>()
     private var cityWeatherItem = MutableLiveData<CityWeatherItem>()
-    private val errorException = MutableLiveData<String>()
+    private var errorException = MutableLiveData<String>()
     private var selectedItem = MutableLiveData<CityWeatherItem>()
 
     init {
-        weatherList.postValue(mutableListOf())
+        weatherList.postValue(db.getWeatherDao().getWeatherList().value)
     }
 
     fun setSelectedItemData(item: CityWeatherItem) {
@@ -37,7 +37,7 @@ class WeatherRepository(
     }
 
     fun getSelectedItemData(): CityWeatherItem? {
-        return cityWeatherItem.value
+        return selectedItem.value
     }
 
     fun initSelectedItem() {
@@ -46,6 +46,7 @@ class WeatherRepository(
 
     fun initCityWeatherItem() {
         cityWeatherItem = MutableLiveData<CityWeatherItem>()
+        errorException = MutableLiveData<String>()
     }
 
     fun getWeatherList(): LiveData<List<CityWeatherItem>> {
@@ -73,6 +74,7 @@ class WeatherRepository(
                 list.add(item)
                 weatherList.postValue(list)
                 cityWeatherItem.postValue(item)
+                db.getWeatherDao().saveAllWeather(list)
             } catch (e: Exception) {
                 errorException.postValue(e.toString())
                 e.printStackTrace()

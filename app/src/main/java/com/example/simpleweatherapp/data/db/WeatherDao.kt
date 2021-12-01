@@ -11,7 +11,7 @@ import com.example.simpleweatherapp.data.db.entities.CityWeatherItem
 interface WeatherDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun saveAllQuotes(quotes: List<CityWeatherItem>)
+    fun saveAllWeather(quotes: List<CityWeatherItem>)
 
     @Query("SELECT * FROM CityWeatherItem")
     fun getWeatherList(): LiveData<List<CityWeatherItem>>

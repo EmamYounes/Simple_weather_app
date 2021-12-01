@@ -76,15 +76,15 @@ class HomeFragment : Fragment(), KodeinAware, OnClick {
 
     private suspend fun manageWeatherList() {
         viewModel.weatherList.await().observe(this, {
-            if (it.isEmpty()) {
-                recyclerview?.visibility = View.GONE
-                addViewLayout?.visibility = View.VISIBLE
-                (activity as HomeActivity).hideAddIconToolbar()
-            } else {
+            if (it != null && it.isNotEmpty()) {
                 recyclerview?.visibility = View.VISIBLE
                 (activity as HomeActivity).showAddIconToolbar()
                 addViewLayout?.visibility = View.GONE
                 initRecyclerView(it.toWeatherViewItem())
+            } else {
+                recyclerview?.visibility = View.GONE
+                addViewLayout?.visibility = View.VISIBLE
+                (activity as HomeActivity).hideAddIconToolbar()
             }
         })
     }
