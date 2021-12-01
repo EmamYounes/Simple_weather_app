@@ -26,4 +26,8 @@ class WeatherViewModel(
 
     }
 
+    fun initCityWeatherItem() {
+        repository.initCityWeatherItem()
+    }
+
 }

@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
@@ -33,7 +32,6 @@ class HomeFragment : Fragment(), KodeinAware {
     private var recyclerview: RecyclerView? = null
     private var addViewLayout: LinearLayout? = null
     private var addIcon: ImageView? = null
-    private var addIconToolbar: AppCompatImageView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,7 +46,6 @@ class HomeFragment : Fragment(), KodeinAware {
         recyclerview = view?.findViewById(R.id.recyclerview)
         addViewLayout = view?.findViewById(R.id.add_view)
         addIcon = view?.findViewById(R.id.add_icon)
-        addIconToolbar = view?.findViewById(R.id.add_icon_toolbar)
         bindUI()
     }
 
@@ -56,6 +53,13 @@ class HomeFragment : Fragment(), KodeinAware {
     private fun bindUI() = Coroutines.main {
         manageWeatherList()
         handleAddIconInCaseEmptyList()
+        handleMainAddIcon()
+    }
+
+    private fun handleMainAddIcon() {
+        (activity as HomeActivity).getAddIconToolbar()?.setOnClickListener {
+            navToAddNewCityFragment()
+        }
     }
 
     private fun handleAddIconInCaseEmptyList() {
@@ -75,10 +79,10 @@ class HomeFragment : Fragment(), KodeinAware {
             if (it.isEmpty()) {
                 recyclerview?.visibility = View.GONE
                 addViewLayout?.visibility = View.VISIBLE
-                addIconToolbar?.visibility = View.GONE
+                (activity as HomeActivity).hideAddIconToolbar()
             } else {
                 recyclerview?.visibility = View.VISIBLE
-                addIconToolbar?.visibility = View.VISIBLE
+                (activity as HomeActivity).showAddIconToolbar()
                 addViewLayout?.visibility = View.GONE
                 initRecyclerView(it.toWeatherViewItem())
             }

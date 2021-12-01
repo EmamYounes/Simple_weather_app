@@ -54,7 +54,6 @@ class AddNewCityFragment : Fragment(), KodeinAware {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, factory).get(WeatherViewModel::class.java)
-        init()
         bindUI()
     }
 
@@ -62,10 +61,12 @@ class AddNewCityFragment : Fragment(), KodeinAware {
         progressBar = view?.findViewById(R.id.progress_bar)
         enterCityNameET = view?.findViewById(R.id.enter_city_name_et)
         addBtn = view?.findViewById(R.id.add_btn)
+        viewModel.initCityWeatherItem()
     }
 
 
     private fun bindUI() = Coroutines.main {
+        init()
         manageEditText()
         manageSuccessResponse()
         manageErrorResponse()
@@ -76,20 +77,20 @@ class AddNewCityFragment : Fragment(), KodeinAware {
         addBtn?.setOnClickListener {
             progressBar?.show()
             GlobalScope.launch {
-                viewModel.addNewCity("london")
+                viewModel.addNewCity(enterCityNameET?.text.toString())
             }
         }
     }
 
     private suspend fun manageErrorResponse() {
-        viewModel.errorException.await().observe(this, {
+        viewModel.errorException.await().observe(viewLifecycleOwner, {
             progressBar?.hide()
             showErrorDialog(it)
         })
     }
 
     private suspend fun manageSuccessResponse() {
-        viewModel.cityWeatherItem.await().observe(this, {
+        viewModel.cityWeatherItem.await().observe(viewLifecycleOwner, {
             progressBar?.hide()
             showSuccessDialog()
         })

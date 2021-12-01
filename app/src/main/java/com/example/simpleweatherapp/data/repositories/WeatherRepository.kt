@@ -19,11 +19,15 @@ class WeatherRepository(
 ) : SafeApiRequest() {
 
     private val weatherList = MutableLiveData<List<CityWeatherItem>>()
-    private val cityWeatherItem = MutableLiveData<CityWeatherItem>()
+    private var cityWeatherItem = MutableLiveData<CityWeatherItem>()
     private val errorException = MutableLiveData<String>()
 
     init {
         weatherList.postValue(mutableListOf())
+    }
+
+    fun initCityWeatherItem() {
+        cityWeatherItem = MutableLiveData<CityWeatherItem>()
     }
 
     fun getWeatherList(): LiveData<List<CityWeatherItem>> {
