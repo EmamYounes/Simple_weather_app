@@ -2,4 +2,9 @@
     <string name="app_name">Simple weather app</string>
     <string name="please_enter_city_name">Please enter city name</string>
     <string name="add_new_city">add new city</string>
+    <string name="error">Error</string>
+    <string name="dismiss">dismiss</string>
+    <string name="success">Success</string>
+    <string name="city_added_successfully">City added successfully</string>
+    <string name="cancel">Cancel</string>
 </resources>

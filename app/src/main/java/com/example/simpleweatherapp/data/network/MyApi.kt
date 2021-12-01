@@ -1,6 +1,7 @@
 package com.example.simpleweatherapp.data.network
 
 import com.example.simpleweatherapp.data.network.responses.CityWeatherResponse
+import com.example.simpleweatherapp.util.ApiConstant
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -33,7 +34,7 @@ interface MyApi {
 
             return Retrofit.Builder()
                 .client(okkHttpclient)
-                .baseUrl("https://api.openweathermap.org/data/2.5/")
+                .baseUrl(ApiConstant.BASE_URL + "data/2.5/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(MyApi::class.java)

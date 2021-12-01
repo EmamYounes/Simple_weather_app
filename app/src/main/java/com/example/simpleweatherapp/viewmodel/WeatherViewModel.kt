@@ -17,6 +17,10 @@ class WeatherViewModel(
         repository.getWeatherItem()
     }
 
+    val errorException by lazyDeferred {
+        repository.getErrorException()
+    }
+
     suspend fun addNewCity(cityName: String) {
         repository.addNewCity(cityName)
 

@@ -1,5 +1,6 @@
 package com.example.simpleweatherapp.ui
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,13 +11,12 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
 import com.example.simpleweatherapp.R
 import com.example.simpleweatherapp.util.Coroutines
 import com.example.simpleweatherapp.util.hide
 import com.example.simpleweatherapp.util.show
-import com.example.simpleweatherapp.util.toast
 import com.example.simpleweatherapp.viewmodel.WeatherViewModel
 import com.example.simpleweatherapp.viewmodel.WeatherViewModelFactory
 import com.jakewharton.rxbinding.widget.RxTextView
@@ -31,6 +31,7 @@ import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
+
 
 class AddNewCityFragment : Fragment(), KodeinAware {
 
@@ -53,26 +54,72 @@ class AddNewCityFragment : Fragment(), KodeinAware {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, factory).get(WeatherViewModel::class.java)
+        init()
+        bindUI()
+    }
+
+    private fun init() {
         progressBar = view?.findViewById(R.id.progress_bar)
         enterCityNameET = view?.findViewById(R.id.enter_city_name_et)
         addBtn = view?.findViewById(R.id.add_btn)
-        bindUI()
     }
 
 
     private fun bindUI() = Coroutines.main {
         manageEditText()
-        viewModel.cityWeatherItem.await().observe(this, Observer {
-            progressBar?.hide()
-            it.name?.let { it1 -> requireContext().toast(it1) }
-        })
+        manageSuccessResponse()
+        manageErrorResponse()
+        handleAddBtn()
+    }
+
+    private fun handleAddBtn() {
         addBtn?.setOnClickListener {
             progressBar?.show()
             GlobalScope.launch {
                 viewModel.addNewCity("london")
             }
         }
+    }
 
+    private suspend fun manageErrorResponse() {
+        viewModel.errorException.await().observe(this, {
+            progressBar?.hide()
+            showErrorDialog(it)
+        })
+    }
+
+    private suspend fun manageSuccessResponse() {
+        viewModel.cityWeatherItem.await().observe(this, {
+            progressBar?.hide()
+            showSuccessDialog()
+        })
+    }
+
+    private fun showSuccessDialog() {
+        AlertDialog.Builder(requireContext())
+            .setIcon(android.R.drawable.stat_sys_download_done)
+            .setTitle(R.string.success)
+            .setMessage(R.string.city_added_successfully)
+            .setPositiveButton(R.string.cancel) { dialogInterface, _ ->
+                dialogInterface.dismiss()
+                val navController =
+                    activity?.findNavController(R.id.nav_host_fragment)
+                navController?.navigateUp()
+            }
+            .show()
+    }
+
+    private fun showErrorDialog(it: String?) {
+        AlertDialog.Builder(requireContext())
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setTitle(R.string.error)
+            .setMessage(it)
+            .setPositiveButton(
+                R.string.dismiss
+            ) { dialogInterface, _ ->
+                dialogInterface.dismiss()
+            }
+            .show()
     }
 
     private fun manageEditText() {
